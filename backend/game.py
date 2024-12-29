@@ -67,3 +67,7 @@ class ChessGame:
         print(chr(27) + "[2J")
         print(f'Previous moves: {str(self.history)}')
         print(str(self.chess_board))
+
+    
+    def get_game_info(self) -> str:
+        return self.chess_board.parse_ascii_chessboard()

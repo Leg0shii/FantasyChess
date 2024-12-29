@@ -12,4 +12,4 @@ class ChessPiece(ABC):
 
     
     def __str__(self) -> str:
-        return "".join(self.__class__.__name__[:1])
+        return self.__class__.__name__[0]

@@ -30,6 +30,32 @@ class ChessBoard():
         return board_string
     
 
+    def parse_ascii_chessboard(self) -> str:
+        piece_map = {
+            'r': 'rook',
+            'n': 'knight',
+            'b': 'bishop',
+            'q': 'queen',
+            'k': 'king',
+            'p': 'pawn'
+        }
+
+        ascii_board = str(self)
+        lines = ascii_board.strip().split('\n')
+        result = []
+
+        for row, line in enumerate(lines):
+            rank = 8 - row
+            for col, char in enumerate(line):
+                if char != 'O':
+                    color = "white" if char.isupper() else "black"
+                    piece_type = piece_map[char.lower()]
+                    square = f"{chr(ord('a') + col)}{rank}"
+                    result.append({"square": square, "piece": f"{piece_type} {color}"})
+
+        return result
+    
+
     def init_start_position(self) -> None:
         self.set_pawns()
         self.set_rooks()

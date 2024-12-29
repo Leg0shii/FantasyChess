@@ -1,2 +1,2 @@
-<h1>My Home</h1>
-<p>Welcome to my home.</p>
+<h1>Fantasy Chess</h1>
+<p>Fantasy Chess is a custom chess engine.</p>
