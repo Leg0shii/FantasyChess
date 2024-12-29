@@ -21,4 +21,4 @@ def f_to_c(field: str) -> tuple:
     if x == -1 or y == -1:
         return None
 
-    return ('abcdefgh'.find(field[0]), '87654321'.find(field[1]))
+    return (x, y)
