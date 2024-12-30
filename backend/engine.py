@@ -1,4 +1,3 @@
-from util import parse_notation
 from board import ChessBoard
 
 

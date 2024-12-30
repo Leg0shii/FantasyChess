@@ -48,35 +48,73 @@
 	const ranks = [8, 7, 6, 5, 4, 3, 2, 1];
 	const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 
-	// To track the piece being dragged
-	let draggedPiece: { square: string; piece: string; color: string } | null = null;
+	// Variables to track the dragging state
+	let draggingPiece: { square: string; piece: string; color: string } | null = null;
+	let dragOffsetX = 0;
+	let dragOffsetY = 0;
 
-	function handleDragStart(event: DragEvent, piece: { square: string; piece: string; color: string }) {
-		draggedPiece = piece;
-		event.dataTransfer?.setData('application/json', JSON.stringify(piece));
-		event.dataTransfer!.effectAllowed = 'move';
+	let dragElement: HTMLElement | null = null;
+
+	function handleMouseDown(event: MouseEvent, piece: { square: string; piece: string; color: string }) {
+		event.preventDefault(); // Prevent native drag behavior
+
+		draggingPiece = piece;
+		positions = positions.filter((p) => p.square !== piece.square);
+
+		// Track the offset of the cursor within the piece
+		const target = event.currentTarget as HTMLElement;
+		const rect = target.getBoundingClientRect();
+		dragOffsetX = rect.width / 2;
+		dragOffsetY = rect.height / 2;
+
+		// Clone the piece element for dragging
+		dragElement = target.cloneNode(true) as HTMLElement;
+		dragElement.style.width = `${rect.width}px`;
+		dragElement.style.height = `${rect.height}px`;
+		dragElement.style.position = 'absolute';
+		dragElement.style.pointerEvents = 'none';
+		dragElement.style.zIndex = '1000';
+		dragElement.style.backgroundSize = 'contain';
+		dragElement.style.left = `${event.clientX - dragOffsetX}px`;
+		dragElement.style.top = `${event.clientY - dragOffsetY}px`;
+		dragElement.style.backgroundImage = getComputedStyle(target).backgroundImage;
+
+		document.body.appendChild(dragElement);
+
+		document.addEventListener('mousemove', handleMouseMove);
+		document.addEventListener('mouseup', handleMouseUp);
 	}
 
-	// Function to handle dropping a piece
-	function handleDrop(event: DragEvent, targetSquare: string) {
-		event.preventDefault();
-		const pieceData = event.dataTransfer?.getData('application/json'); // Retrieve the piece data
-		if (!pieceData) return;
+	function handleMouseMove(event: MouseEvent) {
+		if (dragElement) {
+			dragElement.style.left = `${event.clientX - dragOffsetX}px`;
+			dragElement.style.top = `${event.clientY - dragOffsetY}px`;
+		}
+	}
 
-		const draggedPiece = JSON.parse(pieceData);
-		const draggedSquare = draggedPiece.square;
+	function handleMouseUp(event: MouseEvent) {
+		// Determine the target square
+		const target = document.elementFromPoint(event.clientX, event.clientY);
+		if (target && target.dataset.square && draggingPiece) {
+			const targetSquare = target.dataset.square;
 
-		if (draggedPiece && draggedSquare !== targetSquare) {
-			draggedPiece.square = targetSquare;
-			positions = positions.filter((p) => p.square !== draggedSquare);
-			positions = [...positions, draggedPiece];
+			// Update the position of the dragged piece
+			draggingPiece.square = targetSquare;
+			positions = [...positions, draggingPiece];
+		} else if (draggingPiece) {
+			// Return the piece to its original position if dropped outside the board
+			positions = [...positions, draggingPiece];
 		}
 
-		
-	}
+		// Cleanup
+		if (dragElement) {
+			document.body.removeChild(dragElement);
+			dragElement = null;
+		}
+		draggingPiece = null;
 
-	function allowDrop(event: DragEvent) {
-		event.preventDefault();
+		document.removeEventListener('mousemove', handleMouseMove);
+		document.removeEventListener('mouseup', handleMouseUp);
 	}
 
 </script>
@@ -91,22 +129,16 @@
 		{#each ranks as rank, r}
 			{#each files as file, f}
 				<div
-					role="gridcell"
-					aria-label={`Square ${file}${rank}`}
-					tabindex="0"
-					draggable="false"
 					class:bg-black={(r + f) % 2 === 1}
-					on:dragover={allowDrop}
-					on:drop={(event) => handleDrop(event, `${file}${rank}`)}
+					data-square={`${file}${rank}`}
 				>
 					{#each positions.filter((p) => p.square === `${file}${rank}`) as piece}
 						<piece
 							class={`${piece.piece} ${piece.color}`}
-							draggable="true"
 							role="button"
 							aria-label={`Piece ${piece.piece} ${piece.color}`}
 							tabindex="0"
-							on:dragstart={(event) => handleDragStart(event, piece)}
+							on:mousedown={(event) => handleMouseDown(event, piece)}
 						></piece>
 					{/each}
 				</div>
@@ -133,6 +165,11 @@
 		height: 100%;
 		background-size: contain;
 		display: block;
+		cursor: grab;
+	}
+
+	.chess-board piece:active {
+		cursor: grabbing;
 	}
 
 	.chess-board {
@@ -158,5 +195,11 @@
 
 	.chess-board piece:active {
 		cursor: grabbing;
+	}
+
+	.dragging {
+		position: absolute;
+		pointer-events: none;
+		z-index: 1000;
 	}
 </style>
