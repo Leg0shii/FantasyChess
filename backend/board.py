@@ -51,7 +51,7 @@ class ChessBoard():
                     color = "white" if char.isupper() else "black"
                     piece_type = piece_map[char.lower()]
                     square = f"{chr(ord('a') + col)}{rank}"
-                    result.append({"square": square, "piece": f"{piece_type} {color}"})
+                    result.append({"square": square, "piece": piece_type, "color": color})
 
         return result
     
