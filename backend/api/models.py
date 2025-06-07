@@ -1,27 +1,22 @@
+from typing import Any
 from pydantic import BaseModel
 
-class CreateGameRequest(BaseModel):
-    player_name: str
-
-
-class JoinGameRequest(BaseModel):
+class CreateGameResponse(BaseModel):
+    message: str
     session_key: str
-    player_name: str
 
-
-class LeaveGameRequest(BaseModel):
+class JoinGameResponse(BaseModel):
+    message: str
     session_key: str
-    player_name: str
 
+class LeaveGameResponse(BaseModel):
+    message: str
+    session_key: str
 
-class RegisterRequest(BaseModel):
-    username: str
-    password: str
+class GameStateResponse(BaseModel):
+    message: str
+    game_state: dict[str, Any]
 
-
-class LoginRequest(BaseModel):
-    username: str
-    password: str
-
-class LogoutRequest(BaseModel):
-    pass
+class GameStepResponse(BaseModel):
+    message: str
+    game_state: dict[str, Any]
