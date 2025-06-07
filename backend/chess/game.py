@@ -1,7 +1,8 @@
-from util import parse_notation
-from engine import ChessEngine
-from color import ColorType
-from board import ChessBoard
+from fastapi import logger
+from chess.position import ChessMove, ChessMoveFactory
+from engine.engine import ChessEngine
+from chess.color import ColorType
+from chess.board import ChessBoard
 
 
 class ChessGame:
@@ -21,11 +22,11 @@ class ChessGame:
     
 
     def run_step(self, user_input: str) -> None:
-        parsed_input = parse_notation(user_input)
-        if not self.is_move_allowed(parsed_input):
+        move = ChessMoveFactory.parse_notation(user_input)
+        if not self.is_move_allowed(move):
             raise ValueError(f"{user_input} is not a valid move.")
 
-        self.apply_move(parsed_input)
+        self.apply_move(move)
 
         self.history.append(user_input)
         self.move_count += 1
@@ -53,22 +54,21 @@ class ChessGame:
             self.current_player = self.players[0]
 
     
-    def is_move_allowed(self, user_input: str) -> bool:
-        return self.engine.is_move_allowed(user_input)
+    def is_move_allowed(self, move: ChessMove) -> bool:
+        return self.engine.is_move_allowed(move)
 
 
     def has_won(self) -> None:
         return self.engine.has_won()
     
 
-    def apply_move(self, from_to: list) -> None:
-        print(from_to)
-        from_pos, to_pos = from_to[0], from_to[1]
+    def apply_move(self, move: ChessMove) -> None:
+        logger.debug(f"Applying move: {move}")
         field = self.chess_board.board
 
-        temp = field[from_pos[1]][from_pos[0]]
-        field[from_pos[1]][from_pos[0]] = field[to_pos[1]][to_pos[0]]
-        field[to_pos[1]][to_pos[0]] = temp
+        temp = field[move.start.y][move.start.x]
+        field[move.start.y][move.start.x] = field[move.end.y][move.end.x]
+        field[move.end.y][move.end.x] = temp
 
     
     def get_game_info(self) -> str:

@@ -1,4 +1,5 @@
-from board import ChessBoard
+from chess.position import ChessMove
+from chess.board import ChessBoard
 
 
 class ChessEngine:
@@ -7,10 +8,7 @@ class ChessEngine:
         self.board = board
     
 
-    def is_move_allowed(self, user_input: list) -> bool:
-        if user_input is None:
-            return False
-        
+    def is_move_allowed(self, move: ChessMove) -> bool:
         piece_to_move = None
         return True
 

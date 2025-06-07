@@ -1,4 +1,4 @@
-from color import ColorType
+from chess.color import ColorType
 
 
 class Player:

@@ -1,10 +1,10 @@
-from color import ColorType
-from piece.rook import Rook
-from piece.knight import Knight
-from piece.pawn import Pawn
-from piece.bishop import Bishop
-from piece.queen import Queen
-from piece.king import King
+from chess.color import ColorType
+from chess.piece import Rook
+from chess.piece import Knight
+from chess.piece import Pawn
+from chess.piece import Bishop
+from chess.piece import Queen
+from chess.piece import King
 
 
 class ChessBoard():
