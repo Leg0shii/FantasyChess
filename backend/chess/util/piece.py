@@ -1,6 +1,6 @@
 from abc import ABC
 
-from chess.color import ColorType
+from chess.util.color import ColorType
 
 
 class ChessPiece(ABC):

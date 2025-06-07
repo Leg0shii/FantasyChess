@@ -1,12 +1,13 @@
 import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from api.routes import router
+from backend.api.router import router
+
+
+frontend_url = os.getenv('FRONTEND_URL')
 
 # uvicorn main:app --reload 
 app = FastAPI()
-
-frontend_url = os.getenv('FRONTEND_URL')
 
 app.add_middleware(
     CORSMiddleware,

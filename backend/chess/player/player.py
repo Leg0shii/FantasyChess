@@ -1,5 +1,5 @@
 import uuid
-from chess.color import ColorType
+from chess.util.color import ColorType
 
 
 class Player:
