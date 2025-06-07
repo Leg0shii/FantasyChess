@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
-from model.request_models import CreateGameRequest, JoinGameRequest, LeaveGameRequest
-from chess.color import ColorType
-from chess.player import Player
+from api.models import CreateGameRequest, JoinGameRequest, LeaveGameRequest
+from chess.util.color import ColorType
+from chess.player.player import Player
 from chess.game import ChessGame
 
 router = APIRouter()

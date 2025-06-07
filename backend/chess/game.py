@@ -1,7 +1,8 @@
+import uuid
 from fastapi import logger
-from chess.position import ChessMove, ChessMoveFactory
+from chess.util.position import ChessMove, ChessMoveFactory
 from engine.engine import ChessEngine
-from chess.color import ColorType
+from chess.util.color import ColorType
 from chess.board import ChessBoard
 
 
@@ -19,6 +20,7 @@ class ChessGame:
         self.current_player = player_white
         self.history = []
         self.move_count = 0
+        self.id = str(uuid.uuid4())
     
 
     def run_step(self, user_input: str) -> None:
