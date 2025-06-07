@@ -1,4 +1,7 @@
-backend/__pycache__/board.cpython-313.pyc
-backend/__pycache__/game.cpython-313.pyc
-backend/__pycache__/util.cpython-313.pyc
-backend/piece/__pycache__/chess_piece.cpython-313.pyc
+# backend
+__pycache__
+.venv
+
+# frontend
+.svelte-kit
+node_modules
