@@ -1,4 +1,4 @@
-from chess.player.player import Player
+from domain.models.player import Player
 
 
 class PlayerManager:

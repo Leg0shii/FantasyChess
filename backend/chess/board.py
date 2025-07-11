@@ -1,11 +1,17 @@
-from chess.util.color import ColorType
-from chess.util.piece import Rook, Knight, Bishop, Queen, King, Pawn
+from chess.pieces.base import Piece
+from domain.enums.color import ColorType
+from chess.pieces.rook import Rook
+from chess.pieces.knight import Knight
+from chess.pieces.bishop import Bishop
+from chess.pieces.queen import Queen
+from chess.pieces.king import King
+from chess.pieces.pawn import Pawn
 
 
-class ChessBoard():
+class Board():
 
     def __init__(self) -> None:
-        self.board = [[None for _ in range(8)] for _ in range(8)]
+        self.board: list[list[Piece | None]] = [[None for _ in range(8)] for _ in range(8)]
         self.init_start_position()
 
     
@@ -25,7 +31,7 @@ class ChessBoard():
         return board_string
     
 
-    def parse_ascii_chessboard(self) -> str:
+    def parse_ascii_chessboard(self) -> list[dict[str, str]]:
         piece_map = {
             'r': 'rook',
             'n': 'knight',

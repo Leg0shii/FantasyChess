@@ -1,6 +1,6 @@
 from enum import Enum
 
 
-class ColorType(Enum):
+class ColorType(str, Enum):
     WHITE = 'white'
     BLACK = 'black'

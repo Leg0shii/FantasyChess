@@ -1,6 +1,7 @@
 from typing import Any
 from pydantic import BaseModel
 
+
 class CreateGameResponse(BaseModel):
     message: str
     session_key: str
@@ -18,5 +19,6 @@ class GameStateResponse(BaseModel):
     game_state: dict[str, Any]
 
 class GameStepResponse(BaseModel):
-    message: str
+    winner: str | None = None
+    status: str
     game_state: dict[str, Any]

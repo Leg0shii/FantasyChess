@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 
 router = APIRouter()
+router.include_router(router, tags=["Auth"], prefix="/auth")
 
 @router.post("/register")
 async def register(

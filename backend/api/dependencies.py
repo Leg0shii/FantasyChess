@@ -1,5 +1,5 @@
-from chess.game_manager import GameManager
-from chess.player.player_manager import PlayerManager
+from game.game_manager import GameManager
+from game.player_manager import PlayerManager
 
 game_manager = GameManager()
 player_manager = PlayerManager()

@@ -1,0 +1,2 @@
+fastapi
+load_dotenv

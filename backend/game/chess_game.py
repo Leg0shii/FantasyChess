@@ -1,16 +1,17 @@
+import logging
 import uuid
-from fastapi import logger
-from chess.util.position import ChessMove, ChessMoveFactory
-from engine.engine import ChessEngine
-from chess.util.color import ColorType
-from chess.board import ChessBoard
+from api.models.responses import GameStepResponse
+from domain.enums.color import ColorType
+from domain.models.move import Move, MoveFactory
+from engine.engine import Engine
+from chess.board import Board
 
 
-class ChessGame:
+class Game:
 
     def __init__(self, player_white, player_black=None) -> None:
-        self.chess_board = ChessBoard()
-        self.engine = ChessEngine(self.chess_board)
+        self.board = Board()
+        self.engine = Engine(self.board)
         self.turn = ColorType.WHITE
         self.players = [player_white]
 
@@ -23,8 +24,8 @@ class ChessGame:
         self.id = str(uuid.uuid4())
     
 
-    def run_step(self, user_input: str) -> None:
-        move = ChessMoveFactory.parse_notation(user_input)
+    def run_step(self, user_input: str) -> GameStepResponse:
+        move = MoveFactory.parse_notation(user_input)
         if not self.is_move_allowed(move):
             raise ValueError(f"{user_input} is not a valid move.")
 
@@ -34,17 +35,17 @@ class ChessGame:
         self.move_count += 1
 
         if self.has_won():
-            return {
-                "status": "game_over",
-                "winner": self.current_player.name,
-                "game_state": self.serialize()
-            }
+            return GameStepResponse(
+                status="game_over",
+                winner=self.current_player.name,
+                game_state=self.serialize()
+            )
 
         self.switch_state()
-        return {
-            "status": "in_progress",
-            "game_state": self.serialize()
-        }
+        return GameStepResponse(
+            status="in_progress",
+            game_state=self.serialize()
+        )
 
 
     def switch_state(self) -> None:
@@ -56,25 +57,25 @@ class ChessGame:
             self.current_player = self.players[0]
 
     
-    def is_move_allowed(self, move: ChessMove) -> bool:
+    def is_move_allowed(self, move: Move) -> bool:
         return self.engine.is_move_allowed(move)
 
 
-    def has_won(self) -> None:
+    def has_won(self) -> bool:
         return self.engine.has_won()
     
 
-    def apply_move(self, move: ChessMove) -> None:
-        logger.debug(f"Applying move: {move}")
-        field = self.chess_board.board
+    def apply_move(self, move: Move) -> None:
+        logging.getLogger().debug(f"Applying move: {move}")
+        field = self.board.board
 
-        temp = field[move.start.y][move.start.x]
-        field[move.start.y][move.start.x] = field[move.end.y][move.end.x]
-        field[move.end.y][move.end.x] = temp
+        temp = field[move.from_position.y][move.from_position.x]
+        field[move.from_position.y][move.from_position.x] = field[move.to_position.y][move.to_position.x]
+        field[move.to_position.y][move.to_position.x] = temp
 
     
-    def get_game_info(self) -> str:
-        return self.chess_board.parse_ascii_chessboard()
+    def get_game_info(self) -> list[dict[str, str]]:
+        return self.board.parse_ascii_chessboard()
     
 
     def serialize(self) -> dict:
