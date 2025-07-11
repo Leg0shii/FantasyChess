@@ -1,7 +1,4 @@
-
-
-
-from game.chess_game import Game
+from domain.chess.game import Game
 
 
 class GameManager:

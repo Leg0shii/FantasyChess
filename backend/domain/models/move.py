@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from chess.moves.notation import Notation
+from domain.chess.moves.notation import Notation
 
 
 @dataclass

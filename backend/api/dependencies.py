@@ -1,5 +1,5 @@
-from game.game_manager import GameManager
-from game.player_manager import PlayerManager
+from application.game_manager import GameManager
+from application.player_manager import PlayerManager
 
 game_manager = GameManager()
 player_manager = PlayerManager()

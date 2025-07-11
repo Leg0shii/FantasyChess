@@ -1,10 +1,11 @@
 import logging
 import uuid
 from api.models.responses import GameStepResponse
+from domain.enums.game_state import GameStatus
 from domain.enums.color import ColorType
 from domain.models.move import Move, MoveFactory
-from engine.engine import Engine
-from chess.board import Board
+from domain.chess.engine import Engine
+from domain.chess.board import Board
 
 
 class Game:
@@ -36,14 +37,14 @@ class Game:
 
         if self.has_won():
             return GameStepResponse(
-                status="game_over",
+                status=GameStatus.CHECKMATE,
                 winner=self.current_player.name,
                 game_state=self.serialize()
             )
 
         self.switch_state()
         return GameStepResponse(
-            status="in_progress",
+            status=GameStatus.IN_PROGRESS,
             game_state=self.serialize()
         )
 

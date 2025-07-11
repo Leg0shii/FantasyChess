@@ -1,5 +1,5 @@
 from domain.models.move import Move
-from chess.board import Board
+from domain.chess.board import Board
 
 
 class Engine:

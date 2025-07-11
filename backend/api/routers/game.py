@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
+from domain.chess.game import Game
 from domain.enums.color import ColorType
 from domain.models.player import Player
-from game.chess_game import Game
-from game.game_manager import GameManager
-from game.player_manager import PlayerManager
+from application.game_manager import GameManager
+from application.player_manager import PlayerManager
 from api.dependencies import get_game_manager, get_player_manager
 from api.models.responses import CreateGameResponse, JoinGameResponse, LeaveGameResponse, GameStepResponse
 

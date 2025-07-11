@@ -1,11 +1,11 @@
-from chess.pieces.base import Piece
+from domain.chess.pieces.base import Piece
 from domain.enums.color import ColorType
-from chess.pieces.rook import Rook
-from chess.pieces.knight import Knight
-from chess.pieces.bishop import Bishop
-from chess.pieces.queen import Queen
-from chess.pieces.king import King
-from chess.pieces.pawn import Pawn
+from domain.chess.pieces.rook import Rook
+from domain.chess.pieces.knight import Knight
+from domain.chess.pieces.bishop import Bishop
+from domain.chess.pieces.queen import Queen
+from domain.chess.pieces.king import King
+from domain.chess.pieces.pawn import Pawn
 
 
 class Board():
