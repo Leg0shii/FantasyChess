@@ -5,12 +5,17 @@
 	let sessionKey = '';
 
 	async function createGame() {
-		// Call the API to create a new game
+		console.log("Creating game...");
+		
 		const res = await fetch("http://127.0.0.1:8000/game/create", {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ player_name: "Player White" })
 		});
+
+		console.log("Response status:", res.status);
+        console.log("Response headers:", res.headers);
+
 		const data = await res.json();
 		sessionKey = data.session_key;
 		loadGameState();

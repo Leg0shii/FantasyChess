@@ -1,25 +1,21 @@
 from fastapi import APIRouter
 
+from api.models.requests import RegisterRequest, LoginRequest
+from api.models.responses import InformationResponse
+
 router = APIRouter()
-router.include_router(router, tags=["Auth"], prefix="/auth")
 
 @router.post("/register")
-async def register(
-    username: str,
-    password: str,
-) -> dict[str, str]:
+async def register(request: RegisterRequest) -> InformationResponse:
     """Register a user."""
-    return {"message": "Registered"}
+    return InformationResponse(message="Registered.")
 
 @router.post("/login")
-async def login(
-    username: str,
-    password: str,
-) -> dict[str, str]:
+async def login(request: LoginRequest) -> InformationResponse:
     """Login a user."""
-    return {"message": "Logged in"}
+    return InformationResponse(message="Logged in")
 
 @router.post("/logout")
-async def logout() -> dict[str, str]:
+async def logout() -> InformationResponse:
     """Logout a user."""
-    return {"message": "Logged out"}
+    return InformationResponse(message="Logged out")
