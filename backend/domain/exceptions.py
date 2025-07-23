@@ -6,9 +6,11 @@ class DomainError(Exception):
         super().__init__(message)
         self.message = message
 
+
 class GameFull(DomainError):
     code = "game-full"
     status_code = 409
+
 
 class GameNotFound(DomainError):
     code = "game-not-found"

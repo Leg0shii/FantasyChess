@@ -8,6 +8,7 @@ class Move:
     from_position: Notation
     to_position: Notation
 
+
 class MoveFactory:
 
     @staticmethod

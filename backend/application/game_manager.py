@@ -13,6 +13,5 @@ class GameManager:
         game = self.games.get(game_id, None)
         if game is None:
             raise GameNotFound("Game could not be found")
-        
-        return game
 
+        return game

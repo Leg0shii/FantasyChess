@@ -11,10 +11,11 @@ from domain.chess.pieces.pawn import Pawn
 class Board():
 
     def __init__(self) -> None:
-        self.board: list[list[Piece | None]] = [[None for _ in range(8)] for _ in range(8)]
+        self.board: list[list[Piece | None]] = [
+            [None for _ in range(8)] for _ in range(8)
+        ]
         self.init_start_position()
 
-    
     def __str__(self) -> str:
         board_string = ''
         for y in range(len(self.board)):
@@ -29,7 +30,6 @@ class Board():
                     board_string += "O"
             board_string += '\n'
         return board_string
-    
 
     def parse_ascii_chessboard(self) -> list[dict[str, str]]:
         piece_map = {
@@ -52,10 +52,13 @@ class Board():
                     color = "white" if char.isupper() else "black"
                     piece_type = piece_map[char.lower()]
                     square = f"{chr(ord('a') + col)}{rank}"
-                    result.append({"square": square, "piece": piece_type, "color": color})
+                    result.append({
+                        "square": square,
+                        "piece": piece_type,
+                        "color": color
+                    })
 
         return result
-    
 
     def init_start_position(self) -> None:
         self.set_pawns()
@@ -65,12 +68,10 @@ class Board():
         self.set_queens()
         self.set_kings()
 
-
     def set_pawns(self) -> None:
         for i in range(8):
             self.board[1][i] = Pawn(ColorType.BLACK)
             self.board[6][i] = Pawn(ColorType.WHITE)
-
 
     def set_rooks(self) -> None:
         self.board[0][0] = Rook(ColorType.BLACK)
@@ -78,26 +79,22 @@ class Board():
         self.board[7][0] = Rook(ColorType.WHITE)
         self.board[7][7] = Rook(ColorType.WHITE)
 
-    
     def set_knights(self) -> None:
         self.board[0][1] = Knight(ColorType.BLACK)
         self.board[0][6] = Knight(ColorType.BLACK)
         self.board[7][1] = Knight(ColorType.WHITE)
         self.board[7][6] = Knight(ColorType.WHITE)
 
-    
     def set_bishops(self) -> None:
         self.board[0][2] = Bishop(ColorType.BLACK)
         self.board[0][5] = Bishop(ColorType.BLACK)
         self.board[7][2] = Bishop(ColorType.WHITE)
         self.board[7][5] = Bishop(ColorType.WHITE)
 
-
     def set_queens(self) -> None:
         self.board[0][3] = Queen(ColorType.BLACK)
-        self.board[7][3] = Queen(ColorType.WHITE)   
+        self.board[7][3] = Queen(ColorType.WHITE)
 
-    
     def set_kings(self) -> None:
         self.board[0][4] = King(ColorType.BLACK)
-        self.board[7][4] = King(ColorType.WHITE) 
+        self.board[7][4] = King(ColorType.WHITE)

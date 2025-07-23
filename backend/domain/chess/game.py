@@ -1,6 +1,6 @@
 import logging
 import uuid
-from api.models.responses import GameStepResponse
+from api.models.responses import GameStateResponse, GameStepResponse
 from domain.exceptions import GameFull
 from domain.models.player import Player
 from domain.enums.game_state import GameStatus
@@ -25,7 +25,6 @@ class Game:
         self.history = []
         self.move_count = 0
         self.id = str(uuid.uuid4())
-    
 
     def run_step(self, user_input: str) -> GameStepResponse:
         move = MoveFactory.parse_notation(user_input)
@@ -37,25 +36,31 @@ class Game:
         self.history.append(user_input)
         self.move_count += 1
 
+        game_state = self.serialize()
+
         if self.has_won():
             return GameStepResponse(
-                status=GameStatus.CHECKMATE,
-                winner=self.current_player.name,
-                game_state=self.serialize()
+                winner=self.current_player,
+                state=GameStateResponse(
+                    status=GameStatus.CHECKMATE,
+                    game_state=game_state
+                )
             )
 
         self.switch_state()
         return GameStepResponse(
-            status=GameStatus.IN_PROGRESS,
-            game_state=self.serialize()
+            winner=None,
+            state=GameStateResponse(
+                status=GameStatus.IN_PROGRESS,
+                game_state=game_state
+            )
         )
-    
+
     def add_player(self, player_name: str) -> None:
         if len(self.players) > 1:
             raise GameFull("The game is already full!")
-        
-        self.players.append(Player(name=player_name, color=ColorType.BLACK))
 
+        self.players.append(Player(name=player_name, color=ColorType.BLACK))
 
     def switch_state(self) -> None:
         if self.turn == ColorType.WHITE:
@@ -65,27 +70,27 @@ class Game:
             self.turn = ColorType.WHITE
             self.current_player = self.players[0]
 
-    
     def is_move_allowed(self, move: Move) -> bool:
         return self.engine.is_move_allowed(move)
 
-
     def has_won(self) -> bool:
         return self.engine.has_won()
-    
 
     def apply_move(self, move: Move) -> None:
         logging.getLogger().debug(f"Applying move: {move}")
         field = self.board.board
 
-        temp = field[move.from_position.y][move.from_position.x]
-        field[move.from_position.y][move.from_position.x] = field[move.to_position.y][move.to_position.x]
-        field[move.to_position.y][move.to_position.x] = temp
+        from_y = move.from_position.y
+        from_x = move.from_position.x
+        to_y = move.to_position.y
+        to_x = move.to_position.x
 
-    
+        temp = field[from_y][from_x]
+        field[from_y][from_x] = field[to_y][to_x]
+        field[to_y][to_x] = temp
+
     def get_game_info(self) -> list[dict[str, str]]:
         return self.board.parse_ascii_chessboard()
-    
 
     def serialize(self) -> dict:
         """
