@@ -1,17 +1,16 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
 	import { chessAPI } from "$lib/services/chess-api.js";
+    import { authAPI } from "$lib/services/auth-api.js";
 
-    let playerId = "1";
-    let playerName = 'Test Name';
-    let playerRating = 0;
+    let playerName = '';
+    let password = '';
 
     async function handleCreateGame() {
 		const data = await chessAPI.createGame({
             player: {
-                id: playerId,
                 name: playerName,
-                rating: playerRating
+                rating: 0
             }
         });
 
@@ -19,11 +18,30 @@
         goto("/chess/game/" + sessionKey);
 
 	}
+
+    async function login() {
+        const response = await authAPI.login(playerName, password);
+        if (response.success) {
+            console.log("Login successful");
+        } else {
+            console.error("Login failed");
+        }
+    }
+
+    async function register() {
+        goto("/auth/register");
+    }
 </script>
 
 <div>
-    <button onclick={handleCreateGame}>Create Game</button>
-    <input bind:value={playerId}>
-    <input bind:value={playerName}>
-    <input bind:value={playerRating}>
+    {#if authAPI.isAuthenticated()}
+        <p>Welcome!</p>
+        <button onclick={handleCreateGame}>Create Game</button>
+        <input bind:value={playerName}>
+        <input bind:value={password} type="password" placeholder="Password">
+    {:else}
+        <p>Please log in to play chess.</p>
+        <button onclick={login}>Log In</button>
+        <button onclick={register}>Register</button>
+    {/if}
 </div>

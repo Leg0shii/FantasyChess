@@ -1,7 +1,5 @@
 import type { CreateGameRequest, CreateGameResponse } from "$lib/types/api";
-import type { BoardMatrix, ChessPiece, Move, PieceColor, PieceType, Position } from "$lib/types/chess";
-
-const API_BASE = 'http://localhost:8000';
+import type { BoardMatrix, ChessPiece, Move, PieceColor, PieceType } from "$lib/types/chess";
 
 function toChessPiece(obj: any): ChessPiece {
 	// obj.type & obj.color are plain strings → cast to the union types
