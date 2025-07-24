@@ -1,5 +1,6 @@
 <script>
-    let { children } = $props();
+	import "$src/app.css";
+	let { children } = $props();
 </script>
 
 <svelte:head>
