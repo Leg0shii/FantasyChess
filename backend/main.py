@@ -6,6 +6,7 @@ from fastapi.responses import JSONResponse
 import uvicorn
 from api.routers import auth, game
 from api.models.error import ErrorResponse
+from backend.infrastructure.database import DatabaseManager
 from domain.exceptions import DomainError
 
 load_dotenv()
@@ -74,6 +75,8 @@ def create_app() -> FastAPI:
 app = create_app()
 
 if __name__ == "__main__":
+    db = DatabaseManager()
+    
     uvicorn.run(
         "main:app",
         host="0.0.0.0",

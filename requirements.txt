@@ -1,3 +1,4 @@
 fastapi
 load_dotenv
 uvicorn
+sqlalchemy
